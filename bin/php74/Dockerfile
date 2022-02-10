@@ -90,3 +90,4 @@ RUN a2ensite default-ssl.conf
 
 # Cleanup
 RUN rm -rf /usr/src/*
+RUN echo 'alias sf="php bin/console"' >> ~/.bashrc
