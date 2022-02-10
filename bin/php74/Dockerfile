@@ -11,6 +11,8 @@ RUN apt-get -y update --fix-missing && \
     apt-get --no-install-recommends install -y apt-utils && \
     rm -rf /var/lib/apt/lists/*
 
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt-get install -y nodejs
 
 # Install useful tools and install important libaries
 RUN apt-get -y update && \
@@ -74,8 +76,17 @@ libpng-dev && \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg && \
     docker-php-ext-install gd
 
+
 # Enable apache modules
 RUN a2enmod rewrite headers
+# Prepare fake SSL certificate
+RUN apt-get update
+RUN apt-get install -y ssl-cert
+
+# Setup Apache2 mod_ssl
+RUN a2enmod ssl
+# Setup Apache2 HTTPS env
+RUN a2ensite default-ssl.conf
 
 # Cleanup
 RUN rm -rf /usr/src/*
