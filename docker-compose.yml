@@ -4,6 +4,9 @@ services:
   webserver:
     build: 
       context: ./bin/${PHPVERSION}
+      args:
+        GIT_NAME: ${GIT_NAME}
+        GIT_EMAIL: ${GIT_EMAIL}
     container_name: '${COMPOSE_PROJECT_NAME}-${PHPVERSION}'
     working_dir: '${APACHE_SITE_ROOT}'
     ports:
@@ -21,8 +24,6 @@ services:
       PMA_PORT: ${HOST_MACHINE_PMA_PORT}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       PRETTY_URL: ${PRETTY_URL}
-      GIT_NAME: ${GIT_NAME}
-      GIT_EMAIL: ${GIT_EMAIL}
   database:
     build:
       context: "./bin/${DATABASE}"
