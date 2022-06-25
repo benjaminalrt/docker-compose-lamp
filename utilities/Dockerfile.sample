@@ -2,6 +2,10 @@ FROM php:7.2.24-apache-buster
 
 ARG USERNAME
 
+COPY utilities/new_site.sh /etc/apache2/sites-available
+COPY utilities/template-ssl.conf /etc/apache2/sites-available
+COPY utilities/template.conf /etc/apache2/sites-available
+
 RUN apt-get update \
     &&  apt-get install -y --no-install-recommends \
         locales apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev unzip libpq-dev nodejs npm wget \

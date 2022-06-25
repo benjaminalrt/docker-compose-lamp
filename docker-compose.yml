@@ -5,8 +5,7 @@ services:
     build: 
       context: ./bin/${PHPVERSION}
       args:
-        GIT_NAME: ${GIT_NAME}
-        GIT_EMAIL: ${GIT_EMAIL}
+        USERNAME: ${USERNAME}
     container_name: '${COMPOSE_PROJECT_NAME}-${PHPVERSION}'
     working_dir: '${APACHE_SITE_ROOT}'
     ports:
@@ -17,13 +16,14 @@ services:
     volumes: 
       - ./www:/var/www
       - ${PHP_INI-./config/php/php.ini}:/usr/local/etc/php/php.ini
-      - ${VHOSTS_DIR-./config/vhosts}:/etc/apache2/sites-enabled
+      - ./utilities/template.conf:/etc/apache2/sites-available/template.conf
+      - ./utilities/template-ssl.conf:/etc/apache2/sites-available/template-ssl.conf
+      - ./utilities/new_site.sh:/etc/apache2/sites-available/new_site.sh
       - ${LOG_DIR-./logs/apache2}:/var/log/apache2
     environment:
       APACHE_DOCUMENT_ROOT: ${APACHE_DOCUMENT_ROOT-/var/www/html}
       PMA_PORT: ${HOST_MACHINE_PMA_PORT}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      PRETTY_URL: ${PRETTY_URL}
   database:
     build:
       context: "./bin/${DATABASE}"
