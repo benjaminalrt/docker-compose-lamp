@@ -8,7 +8,8 @@ RUN apt-get update \
     &&  apt-get install -y --no-install-recommends \
         locales apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev unzip libpq-dev wget \
         apt-transport-https lsb-release ca-certificates \
-    && apt-get install sudo
+    && apt-get install sudo \
+    && apt-get install -y vim
 
 RUN curl -sS https://getcomposer.org/installer | php -- \
     &&  mv composer.phar /usr/local/bin/composer
