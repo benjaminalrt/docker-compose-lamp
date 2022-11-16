@@ -63,3 +63,8 @@ Enfin, s'ajouter dans les droits web pour pouvoir coder depuis son IDE
 ```
 sudo chown $identifiant:www-data /var/www -R
 ```
+
+
+## 
+
+alias dockergo='source ~/finddocker && launchdocker'

@@ -1,6 +1,6 @@
 FROM php:8.1-apache-buster
 
-ARG WHO_AM_I
+ARG WHOAMI
 
 RUN apt-get update \
     && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
@@ -35,4 +35,14 @@ RUN a2ensite default-ssl.conf
 
 # Cleanup
 RUN rm -rf /usr/src/*
-RUN echo 'alias sf="php bin/console"' >> ~/.bashrc
+
+RUN useradd -ms /bin/bash ${WHOAMI}
+
+RUN usermod -aG sudo ${WHOAMI}
+RUN adduser ${WHOAMI} www-data
+RUN chown ${WHOAMI}:www-data /var/www -R
+RUN echo 'alias sf="php bin/console"' >> /home/${WHOAMI}/.bashrc
+RUN echo "parse_git_branch() { \n\
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/' \n\
+} \n\
+export PS1=\"\u@\h \[\\\e[32m\]\w \[\\\e[91m\]\$(parse_git_branch)\[\\\e[00m\]$ \"" >> /home/${WHOAMI}/.bashrc

@@ -1,0 +1,32 @@
+findconfig() {
+  if [ -f "$1" ]; then
+    echo "${PWD%/}"
+  elif [ "$PWD" = / ]; then
+    false
+  else
+    (cd .. && findconfig "$1")
+  fi
+}
+
+findenv() {
+  echo $(findconfig $1)/.env
+
+}
+
+getdocker() {
+  path=$(findenv docker-compose.yml)
+  export $(echo $(cat $path | sed 's/#.*//g'| xargs) | envsubst)
+  echo $COMPOSE_PROJECT_NAME-$PHPVERSION
+}
+
+launchdocker() {
+  if [ $1 ]; then
+    targetuser=$1
+  else
+    targetuser=$USER
+  fi
+  container=$(getdocker)
+  result=${PWD##*/}
+  result=${result:-/} 
+  docker exec -it -w /var/www/$result -u $targetuser $container bash
+}
